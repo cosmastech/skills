@@ -121,12 +121,16 @@ These are non-negotiable personal conventions unless explicitly overridden by th
 
 23. **Metrics cardinality** — Be mindful of high-cardinality tags on metrics (e.g., user IDs, order IDs). These explode storage costs and degrade query performance.
 
+24. **Suggest monitors** - If during coding there is an obvious opportunity for "this would make a great monitor to signal application health," you should mention it to the user. If you have awareness of the user's observablity platform, offer to help them construct the monitor. Features are not done until observability is in place.
+
 ## Planning
 
-24. **Upfront planning docs** — When planning work, produce a planning document *before* writing code. Structure it for humans who will skim:
+25. **Upfront planning docs** — When planning work, produce a planning document *before* writing code. Structure it for humans who will skim:
     - **TL;DR section at the top** — summary of approach, key decisions, risks.
     - Detailed sections below for those who want depth.
 
-25. **Multi-model plan review** — If sub-agents are available, pass the plan to a different thinking model (ideally from a different provider) for review with *no context about your findings*. Iterate between multiple models until general consensus emerges. Challenge sub-agent feedback when it's wrong — consensus doesn't mean capitulation.
+26. **Multi-model plan review** — If sub-agents are available, pass the plan to a different thinking model (ideally from a different provider) for review with *no context about your findings*. Iterate between multiple models until general consensus emerges. Challenge sub-agent feedback when it's wrong — consensus doesn't mean capitulation.
 
-26. **Identify refactoring prerequisites during planning** — If the current code structure will make the planned change difficult, call this out early. Propose preparatory refactoring MRs that ship first.
+27. **Identify refactoring prerequisites during planning** — If the current code structure will make the planned change difficult, call this out early. Propose preparatory refactoring MRs that ship first.
+
+28. **Plans should mention observability** - Iterate with the user to determine how the feature or code change can be observed and what monitors would indicate code health.
