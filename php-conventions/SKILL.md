@@ -11,16 +11,18 @@ These are non-negotiable personal conventions unless explicitly overridden by th
 
 1. **Strict types** — Every PHP file must declare `declare(strict_types=1);` at the top. If it is an existing file, you do not need to add it, but mention it to the user. 
 
-2. **Import function calls** — Always use function imports rather than calling global functions inline:
+2. **Import function calls and constants** — Always use function and constant imports rather than calling global functions inline:
    ```php
    use function array_key_exists;
    use function sprintf;
    use function count;
+
+   use const JSON_THROW_ON_ERROR;
    ```
 
 3. **`#[Override]` attribute** — Always add `#[Override]` to methods that override a parent or implement an interface method.
 
-4. **`final readonly` classes** — Prefer `final readonly` by default. Drop `readonly` only when mutability is genuinely needed (e.g., mutable DTOs). Drop `final` only when extension is a deliberate design choice. If either worsens developer experience, relax — but call it out.
+4. **`final readonly` classes** — Prefer `final readonly` by default. Drop `readonly` only when mutability is genuinely needed (e.g., mutable DTOs, test cases). Drop `final` only when extension is a deliberate design choice. If either worsens developer experience, relax — but call it out.
 
 5. **PHPStan generics & iterables** — Document iterables and generic types explicitly. Never mark iterables as `array<array-key, mixed>` — take the time to define the actual shape. Use `@phpstan-type` annotations when the type will likely be imported by other files:
    ```php
@@ -28,6 +30,7 @@ These are non-negotiable personal conventions unless explicitly overridden by th
     * @phpstan-type OrderContext array{orderId: int, shopId: int, items: list<LineItemData>}
     */
    ```
+   Reference the phpstan-type (`phpstan-type-import` if defined in another class) instead of duplicating the array shape.
 
 6. **PHPStan discipline** — Do not add entries to PHPStan baseline files. Fix the errors properly. When a `@phpstan-ignore` is genuinely necessary, always include a parenthetical explanation of *why*:
    ```php
@@ -139,6 +142,8 @@ These are non-negotiable personal conventions unless explicitly overridden by th
 
 30. **Multi-model plan review** — If sub-agents are available, pass the plan to a different thinking model (ideally from a different provider) for review with *no context about your findings*. Iterate between multiple models until general consensus emerges. Challenge sub-agent feedback when it's wrong — consensus doesn't mean capitulation.
 
-31. **Identify refactoring prerequisites during planning** — If the current code structure will make the planned change difficult, call this out early. Propose preparatory refactoring MRs that ship first.
+31. **Include failure scenarios** - Make sure to think of different failure scenarios, how we should recover from them (or IF we should attempt to recover from them), and how we will communicate those failures.
+
+32. **Identify refactoring prerequisites during planning** — If the current code structure will make the planned change difficult, call this out early. Propose preparatory refactoring MRs that ship first.
 
 28. **Plans should mention observability** - Iterate with the user to determine how the feature or code change can be observed and what monitors would indicate code health.
