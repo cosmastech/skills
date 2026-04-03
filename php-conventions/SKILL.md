@@ -76,19 +76,21 @@ These are non-negotiable personal conventions unless explicitly overridden by th
 
 13. **Domain knowledge as comments** — When a planning doc, JIRA ticket, or external context reveals domain knowledge not obvious from the code, add it as a comment. This helps future developers and LLM agents. These are among the most valuable comments possible.
 
+14. **Not everything needs an interface** - If there is likely going to be exactly one instance of an implementation, an interface may not be necessary. Remember: hand-rolled mocks/spies/stubs/fakes used in testing are a second implementation. Not using an interface may potentially make testing harder, so you'll need to weigh these tradeoffs. Since this requires taste, you may need input from the user.
+
 ## Testing Philosophy
 
-14. **Prefer PHPUnit (unit) tests** — Unit tests are dramatically faster than feature tests. When writing *new* code, design it to be unit-testable: use dependency injection, avoid facades in business logic, accept interfaces. If code is untestable without booting Laravel, that's a design signal worth discussing.
+15. **Prefer PHPUnit (unit) tests** — Unit tests are dramatically faster than feature tests. When writing *new* code, design it to be unit-testable: use dependency injection, avoid Laravel facades in business logic, accept interfaces. If code is untestable without booting Laravel, that's a design signal worth discussing.
 
-15. **Avoid mocking frameworks** — Mocking frameworks (Mockery, PHPUnit mocks) usually test the wrong layer and indicate a design flaw. Acceptable uses:
+16. **Avoid mocking frameworks** — Mocking frameworks (Mockery, PHPUnit mocks) usually test the wrong layer and indicate a design flaw. Acceptable uses:
     - **Stubs**: providing a canned return value from a dependency
     - **Classical mocks**: verifying a specific interaction that *is* the point of the test (e.g., "did we dispatch this event?")
 
     If you find yourself reaching for a mock, pause and discuss refactoring opportunities with the user before proceeding. Mocks are a last resort.
 
-16. **NEVER mock Data objects. NEVER mock Laravel models.** — Instantiate them. If a Data object or Model is hard to construct, that's a test-design or code-design problem to address, not a reason to mock.
+17. **NEVER mock Data objects. NEVER mock Laravel models.** — Instantiate them. If a Data object or Model is hard to construct, that's a test-design or code-design problem to address, not a reason to mock.
 
-17. **Test structure** — Delimit test sections with comments:
+18. **Test structure** — Delimit test sections with comments:
     ```php
     // Given a user without permissions
     $user = User::factory()->create(['role' => 'viewer']);
@@ -101,15 +103,21 @@ These are non-negotiable personal conventions unless explicitly overridden by th
     ```
     Add a brief description after `Given`, `When`, or `Then` when it clarifies intent.
 
-18. **Never test private/protected methods directly** — If you feel the need to test a private or protected method on code we own, that's a design smell. Extract the logic into a collaborator class with public methods and test that instead. The need to reach into private internals means the class is doing too much or the boundaries are wrong.
+19. **Test method naming** - The method of a test name should be `{condition}_{theMethodBeingCalled}_{then}` and should use the `#[Test]` attribute rather than prefixing the method with `test_`. Be descriptive, but avoid making the test method name more than 60 characters.
 
-19. **Don't assert against log statements** — Unless you're testing a logger or logging infrastructure itself, avoid asserting that specific log messages were produced. Logs are observability, not behavior.
+20. **Reference assertion methods statically** - PHPUnit allows you to call either `$this->assertEquals()` or `self::assertEquals()`. Unless the rest of the test class is already using `$this->assert*`, prefer calling them statically.
+
+21. **Mark tests as final** - This is the recommendation from PHPUnit's creator.
+
+22. **Never test private/protected methods directly** — If you feel the need to test a private or protected method on code we own, that's a design smell. Extract the logic into a collaborator class with public methods and test that instead. The need to reach into private internals means the class is doing too much or the boundaries are wrong.
+
+23. **Don't assert against log statements** — Unless you're testing a logger or logging infrastructure itself, avoid asserting that specific log messages were produced. Logs are observability, not behavior.
 
 ## Working in Existing Code
 
-20. **Accept the team's conventions** — When modifying existing code, follow the conventions already in place in that area. You may *mention* that refactoring opportunities exist and how the current code conflicts with these rules, but deliver value first. Being opinionated is secondary to shipping.
+24. **Accept the team's conventions** — When modifying existing code, follow the conventions already in place in that area. You may *mention* that refactoring opportunities exist and how the current code conflicts with these rules, but deliver value first. Being opinionated is secondary to shipping.
 
-21. **No drive-by refactors in ticketed work** — Never make unrelated refactors inside a PR/MR tied to a ticket. Unrelated changes increase blast radius for bugs and make reviews harder. Instead:
+25. **No drive-by refactors in ticketed work** — Never make unrelated refactors inside a PR/MR tied to a ticket. Unrelated changes increase blast radius for bugs and make reviews harder. Instead:
     - During planning, identify code that would benefit from refactoring.
     - Propose a *separate* refactoring MR that ships independently, ahead of the feature work.
     - Follow the principle: **"Make the change easy, then make the easy change."**
@@ -117,20 +125,20 @@ These are non-negotiable personal conventions unless explicitly overridden by th
 
 ## Observability
 
-22. **Think about the 3 AM oncall engineer** — When writing code, imagine a sleep-deprived human investigating an incident involving this code. Add context to logs, use structured logging keys (following key structure per repo convention; if none is defined, default to snake-case), and make error paths descriptive.
+26. **Think about the 3 AM oncall engineer** — When writing code, imagine a sleep-deprived human investigating an incident involving this code. Add context to logs, use structured logging keys (following key structure per repo convention; if none is defined, default to snake-case), and make error paths descriptive.
 
-23. **Metrics cardinality** — Be mindful of high-cardinality tags on metrics (e.g., user IDs, order IDs). These explode storage costs and degrade query performance.
+27. **Metrics cardinality** — Be mindful of high-cardinality tags on metrics (e.g., user IDs, order IDs). These explode storage costs and degrade query performance.
 
-24. **Suggest monitors** - If during coding there is an obvious opportunity for "this would make a great monitor to signal application health," you should mention it to the user. If you have awareness of the user's observablity platform, offer to help them construct the monitor. Features are not done until observability is in place.
+28. **Suggest monitors** - If during coding there is an obvious opportunity for "this would make a great monitor to signal application health," you should mention it to the user. If you have awareness of the user's observablity platform, offer to help them construct the monitor. Features are not done until observability is in place.
 
 ## Planning
 
-25. **Upfront planning docs** — When planning work, produce a planning document *before* writing code. Structure it for humans who will skim:
+29. **Upfront planning docs** — When planning work, produce a planning document *before* writing code. Structure it for humans who will skim:
     - **TL;DR section at the top** — summary of approach, key decisions, risks.
     - Detailed sections below for those who want depth.
 
-26. **Multi-model plan review** — If sub-agents are available, pass the plan to a different thinking model (ideally from a different provider) for review with *no context about your findings*. Iterate between multiple models until general consensus emerges. Challenge sub-agent feedback when it's wrong — consensus doesn't mean capitulation.
+30. **Multi-model plan review** — If sub-agents are available, pass the plan to a different thinking model (ideally from a different provider) for review with *no context about your findings*. Iterate between multiple models until general consensus emerges. Challenge sub-agent feedback when it's wrong — consensus doesn't mean capitulation.
 
-27. **Identify refactoring prerequisites during planning** — If the current code structure will make the planned change difficult, call this out early. Propose preparatory refactoring MRs that ship first.
+31. **Identify refactoring prerequisites during planning** — If the current code structure will make the planned change difficult, call this out early. Propose preparatory refactoring MRs that ship first.
 
 28. **Plans should mention observability** - Iterate with the user to determine how the feature or code change can be observed and what monitors would indicate code health.
