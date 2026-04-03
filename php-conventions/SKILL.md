@@ -117,7 +117,7 @@ These are non-negotiable personal conventions unless explicitly overridden by th
 
 ## Observability
 
-22. **Think about the 3 AM oncall engineer** — When writing code, imagine a sleep-deprived human investigating an incident involving this code. Add context to logs, use structured logging keys (following key structure per repo convention. if none is defined, default to snake-case), and make error paths descriptive.
+22. **Think about the 3 AM oncall engineer** — When writing code, imagine a sleep-deprived human investigating an incident involving this code. Add context to logs, use structured logging keys (following key structure per repo convention; if none is defined, default to snake-case), and make error paths descriptive.
 
 23. **Metrics cardinality** — Be mindful of high-cardinality tags on metrics (e.g., user IDs, order IDs). These explode storage costs and degrade query performance.
 
