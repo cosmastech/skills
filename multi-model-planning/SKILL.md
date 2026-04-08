@@ -29,6 +29,8 @@ At least one agentic CLI must be installed and authenticated:
 | Claude Code | `claude --version` | `claude --model <model> -p "<prompt>"` |
 | OpenAI Codex | `codex --version` | `codex --model <model> -q "<prompt>"` |
 
+If cursor's `agent` is installed, always prefer using that and specifying models rather than mixing and matching CLI utilities.
+
 ## Workflow
 
 ### 1. Draft the plan
