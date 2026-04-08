@@ -1,0 +1,29 @@
+---
+name: laravel-conventions
+description: Personal Laravel conventions enforced when creating, modifying, or planning code that will touch code utilizing the Laravel framework.
+---
+
+# Laravel Conventions
+
+These are non-negotiable personal conventions unless explicitly overridden by the user.
+
+## Logging
+
+Use `Context@scope()` liberally if important contextual data exists in a parent but not within the children, and the children are writing logs. This allows for maintaining contextual information inside of function calls without needing to pass that data to child functions.
+
+```php
+Context::scope(function() use ($user) {
+    Context::add('user', $user->id);
+
+    $this->somePrivateMethod($user);
+    // ...
+});
+```
+
+## Dependency Injection
+
+Prefer dependency injection to using facades. For large projects, test suite time is always a concern, and using facades disallow writing pure PHPUnit tests.
+
+## Testing
+
+Use `Model::factory()->make()` whenever possible. Database writes are often unnecessary inside of tests.
