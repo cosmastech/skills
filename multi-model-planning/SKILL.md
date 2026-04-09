@@ -58,7 +58,11 @@ for the reviewer role, instructions, and expected output format.
 ### 2. Send to models in parallel
 
 Fire both review requests in a single message so they run concurrently.
-Use whichever CLI(s) and models the user prefers. Examples:
+Use whichever CLI(s) and models the user prefers. If the user does not
+specify, you always want to use the latest model that is high thinking
+for the providers.
+
+Examples:
 
 ```bash
 # Cursor Agent

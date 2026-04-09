@@ -55,7 +55,10 @@ Include in the prompt:
 
 ### 2. Send to models in parallel
 
-Fire review requests concurrently using different providers:
+Fire both review requests in a single message so they run concurrently.
+Use whichever CLI(s) and models the user prefers. If the user does not
+specify, you always want to use the latest model that is high thinking
+from two different providers.
 
 ```bash
 # Cursor Agent
