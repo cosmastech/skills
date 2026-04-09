@@ -62,8 +62,8 @@ from two different providers.
 
 ```bash
 # Cursor Agent
-agent --model gpt-5.3-codex-high --print "$(cat /tmp/code-review.md)" 2>&1
-agent --model composer-2 --print "$(cat /tmp/code-review.md)" 2>&1
+agent --model gpt-5.4-xhigh --print "$(cat /tmp/code-review.md)" 2>&1
+agent --model claude-4.6-opus-max-thinking --print "$(cat /tmp/code-review.md)" 2>&1
 
 # Claude Code
 claude --model claude-sonnet-4-20250514 -p "$(cat /tmp/code-review.md)" 2>&1

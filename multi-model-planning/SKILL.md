@@ -66,8 +66,8 @@ Examples:
 
 ```bash
 # Cursor Agent
-agent --model gpt-5.3-codex-high --print "$(cat /tmp/plan-review.md)" 2>&1
-agent --model composer-2 --print "$(cat /tmp/plan-review.md)" 2>&1
+agent --model gpt-5.4-xhigh --print "$(cat /tmp/plan-review.md)" 2>&1
+agent --model claude-4.6-opus-max-thinking --print "$(cat /tmp/plan-review.md)" 2>&1
 
 # Claude Code
 claude --model opus -p "$(cat /tmp/plan-review.md)" 2>&1
