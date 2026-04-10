@@ -24,6 +24,12 @@ Context::scope(function() use ($user) {
 });
 ```
 
+## Helper Methods
+
+Prefer `new Collection()` over `collect()`. This reduces an extra stack and indirection.
+
+Using `tap()` rarely the right call for readability.
+
 ## Dependency Injection
 
 Prefer dependency injection to using facades. For large projects, test suite time is always a concern, and using facades disallow writing pure PHPUnit tests.
