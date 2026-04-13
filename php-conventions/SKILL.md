@@ -1,6 +1,6 @@
 ---
 name: php-conventions
-description: Personal PHP conventions enforced when creating, modifying, or planning code that will touch PHP files. Covers strict types, function imports, testing philosophy, class design, observability, and planning practices. Activate whenever working on PHP code.
+description: Personal PHP conventions enforced when creating or modifying PHP files. Covers strict types, function imports, testing philosophy, class design, and observability. Activate whenever working on PHP code.
 ---
 
 # PHP Conventions
@@ -122,30 +122,6 @@ These are non-negotiable personal conventions unless explicitly overridden by th
 
 - **Accept the team's conventions** — When modifying existing code, follow the conventions already in place in that area. You may *mention* that refactoring opportunities exist and how the current code conflicts with these rules, but deliver value first. Being opinionated is secondary to shipping.
 
-- **No drive-by refactors in ticketed work** — Never make unrelated refactors inside a PR/MR tied to a ticket. Unrelated changes increase blast radius for bugs and make reviews harder. Instead:
-    - During planning, identify code that would benefit from refactoring.
-    - Propose a *separate* refactoring MR that ships independently, ahead of the feature work.
-    - Follow the principle: **"Make the change easy, then make the easy change."**
-    - This requires judgment — always flag it to the user.
-
 ## Observability
 
-- **Think about the 3 AM oncall engineer** — When writing code, imagine a sleep-deprived human investigating an incident involving this code. Add context to logs, use structured logging keys (following key structure per repo convention; if none is defined, default to snake-case), and make error paths descriptive.
-
 - **Metrics cardinality** — Be mindful of high-cardinality tags on metrics (e.g., user IDs, order IDs). These explode storage costs and degrade query performance.
-
-- **Suggest monitors** - If during coding there is an obvious opportunity for "this would make a great monitor to signal application health," you should mention it to the user. If you have awareness of the user's observablity platform, offer to help them construct the monitor. Features are not done until observability is in place.
-
-## Planning
-
-- **Upfront planning docs** — When planning work, produce a planning document *before* writing code. Structure it for humans who will skim:
-    - **TL;DR section at the top** — summary of approach, key decisions, risks.
-    - Detailed sections below for those who want depth.
-
-- **Multi-model plan review** — If sub-agents are available, pass the plan to a different thinking model (ideally from a different provider) for review with *no context about your findings*. Iterate between multiple models until general consensus emerges. Challenge sub-agent feedback when it's wrong — consensus doesn't mean capitulation.
-
-- **Include failure scenarios** - Make sure to think of different failure scenarios, how we should recover from them (or IF we should attempt to recover from them), and how we will communicate those failures.
-
-- **Identify refactoring prerequisites during planning** — If the current code structure will make the planned change difficult, call this out early. Propose preparatory refactoring MRs that ship first.
-
-- **Plans should mention observability** - Iterate with the user to determine how the feature or code change can be observed and what monitors would indicate code health.
