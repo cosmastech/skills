@@ -28,7 +28,7 @@ Context::scope(function() use ($user) {
 
 Prefer `new Collection()` over `collect()`. This reduces an extra stack and indirection.
 
-Using `tap()` rarely the right call for readability.
+Using `tap()` is rarely the right call for readability.
 
 ## Dependency Injection
 
