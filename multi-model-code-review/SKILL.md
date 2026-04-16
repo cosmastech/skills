@@ -60,6 +60,10 @@ Use whichever CLI(s) and models the user prefers. If the user does not
 specify, you always want to use the latest model that is high thinking
 from two different providers.
 
+Do not assume the models that are available. Always check with the CLI tool first.
+
+For example:
+
 ```bash
 # Cursor Agent
 agent --model gpt-5.4-xhigh --print "$(cat /tmp/code-review.md)" 2>&1

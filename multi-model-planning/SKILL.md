@@ -62,6 +62,10 @@ Use whichever CLI(s) and models the user prefers. If the user does not
 specify, you always want to use the latest model that is high thinking
 for the providers.
 
+Do not assume the models that are available. Always check with the CLI tool first.
+If you are unclear, ask the user which model they would like to use. Provide your
+suggestions first.
+
 Examples:
 
 ```bash
