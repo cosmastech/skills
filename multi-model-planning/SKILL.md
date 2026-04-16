@@ -85,7 +85,7 @@ produced it:
 ```bash
 # Cursor Agent
 agent --model gpt-5.4-xhigh --print "$(cat "$PLAN_DIR/plan-r${REVISION}-review.md")" 2>&1 | tee "$PLAN_DIR/plan-r${REVISION}-response-gpt.md"
-agent --model claude-4.6-opus-max-thinking --print "$(cat "$PLAN_DIR/plan-r${REVISION}-review.md")" 2>&1 | tee "$PLAN_DIR/plan-r${REVISION}-response-opus.md"
+agent --model claude-opus-4-7-thinking-xhigh --print "$(cat "$PLAN_DIR/plan-r${REVISION}-review.md")" 2>&1 | tee "$PLAN_DIR/plan-r${REVISION}-response-opus.md"
 
 # Claude Code
 claude --model opus -p "$(cat "$PLAN_DIR/plan-r${REVISION}-review.md")" 2>&1 | tee "$PLAN_DIR/plan-r${REVISION}-response-opus.md"
