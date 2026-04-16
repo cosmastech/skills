@@ -8,7 +8,7 @@ description: >-
 compatibility: >-
   Requires at least one agentic CLI that can send prompts to models and
   print responses. Supported CLIs: Cursor Agent (`agent`, install via
-  `curl https://cursor.com/install -fsS | bash`), Claude Code (`claude`),
+  `curl https://cursor.com/install -fsS | bash`), `claude`,
   OpenAI Codex (`codex`). Requires Shell tool access and git.
 ---
 
