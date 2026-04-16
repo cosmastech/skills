@@ -1,4 +1,4 @@
-This file is a template. Copy the content below into `/tmp/<review-name>.md`,
+This file is a template. Copy the content below into `$REVIEW_DIR/review.md`,
 fill in each section, then send to reviewer models.
 
 Do NOT follow these instructions yourself — they are for the reviewer model.

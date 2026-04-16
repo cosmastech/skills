@@ -35,7 +35,17 @@ If cursor's `agent` is installed, always prefer using that and specifying models
 
 ### 1. Draft the plan
 
-Write the proposal to a temporary file. Use the template in
+Create a branch-scoped working directory so artifacts from different planning
+sessions never collide. Track the revision number starting at 1:
+
+```bash
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+PLAN_DIR="/tmp/planning-${BRANCH}"
+mkdir -p "$PLAN_DIR"
+REVISION=1
+```
+
+Write the proposal using the template in
 [assets/planning-prompt-template.md](assets/planning-prompt-template.md) as a
 starting point. The plan must include:
 
@@ -43,13 +53,14 @@ starting point. The plan must include:
 - **Proposal**: the concrete change being considered.
 - **Numbered questions**: specific decisions you need reviewer input on.
 
-Write the file to `/tmp/<descriptive-name>.md`.
+Write the file to `$PLAN_DIR/plan-r${REVISION}.md`.
 
 Then build the full reviewer prompt by combining the reviewer instructions
 template with the plan content:
 
 ```bash
-cat assets/reviewer-prompt-template.md /tmp/<plan>.md > /tmp/<plan>-review.md
+cat assets/reviewer-prompt-template.md "$PLAN_DIR/plan-r${REVISION}.md" \
+  > "$PLAN_DIR/plan-r${REVISION}-review.md"
 ```
 
 See [assets/reviewer-prompt-template.md](assets/reviewer-prompt-template.md)
@@ -68,16 +79,19 @@ suggestions first.
 
 Examples:
 
+Capture each model's output into `$PLAN_DIR/` alongside the prompt that
+produced it:
+
 ```bash
 # Cursor Agent
-agent --model gpt-5.4-xhigh --print "$(cat /tmp/plan-review.md)" 2>&1
-agent --model claude-4.6-opus-max-thinking --print "$(cat /tmp/plan-review.md)" 2>&1
+agent --model gpt-5.4-xhigh --print "$(cat "$PLAN_DIR/plan-r${REVISION}-review.md")" 2>&1 | tee "$PLAN_DIR/plan-r${REVISION}-response-gpt.md"
+agent --model claude-4.6-opus-max-thinking --print "$(cat "$PLAN_DIR/plan-r${REVISION}-review.md")" 2>&1 | tee "$PLAN_DIR/plan-r${REVISION}-response-opus.md"
 
 # Claude Code
-claude --model opus -p "$(cat /tmp/plan-review.md)" 2>&1
+claude --model opus -p "$(cat "$PLAN_DIR/plan-r${REVISION}-review.md")" 2>&1 | tee "$PLAN_DIR/plan-r${REVISION}-response-opus.md"
 
 # OpenAI Codex
-codex --model o3 -q "$(cat /tmp/plan-review.md)" 2>&1
+codex --model o3 -q "$(cat "$PLAN_DIR/plan-r${REVISION}-review.md")" 2>&1 | tee "$PLAN_DIR/plan-r${REVISION}-response-o3.md"
 ```
 
 If you are using `agent`, you can select different models. This is preferred.  Otherwise attempt to mix and match CLIs to get diverse perspectives across providers. If there is only one CLI, you can still practice this exercise, you just won't have the diversity of models.
@@ -94,16 +108,32 @@ After both responses return:
 
 ### 4. Draft round N+1
 
-Write a consolidated plan incorporating round N feedback. Include:
+Bump the revision number and write the consolidated plan:
+
+```bash
+REVISION=$((REVISION + 1))
+```
+
+Write the updated plan to `$PLAN_DIR/plan-r${REVISION}.md`, incorporating
+round N feedback. Include:
 
 - A **decision log** for each resolved question.
 - Any **new questions** surfaced by reviewers.
 - Updated code sketches if the design changed.
 
+Build the reviewer prompt for this round:
+
+```bash
+cat assets/reviewer-prompt-template.md "$PLAN_DIR/plan-r${REVISION}.md" \
+  > "$PLAN_DIR/plan-r${REVISION}-review.md"
+```
+
 Send the updated plan to both models again. Repeat until:
 
 - Both models agree the plan is sound.
 - No unresolved critical issues remain.
+
+Previous revisions are preserved in `$PLAN_DIR/` for reference.
 
 ### 5. Execute
 

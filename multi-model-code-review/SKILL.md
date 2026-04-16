@@ -34,16 +34,24 @@ If cursor's `agent` is installed, always prefer using that and specifying models
 
 ### 1. Prepare the review context
 
-Gather the diff and any relevant context for the reviewer. Write it to a
-temporary file using the template in
+Create a branch-scoped working directory so artifacts from different reviews
+never collide:
+
+```bash
+BRANCH=$(git rev-parse --abbrev-ref HEAD)
+REVIEW_DIR="/tmp/code-review-${BRANCH}"
+mkdir -p "$REVIEW_DIR"
+```
+
+Gather the diff and any relevant context for the reviewer. Write it to
+`$REVIEW_DIR/` using the template in
 [assets/code-review-prompt-template.md](assets/code-review-prompt-template.md).
 
 ```bash
-# Get the diff against the parent branch
-git diff <parent-branch>...HEAD > /tmp/review-diff.txt
+git diff <parent-branch>...HEAD > "$REVIEW_DIR/diff.txt"
 ```
 
-Include in the prompt:
+Build the review prompt at `$REVIEW_DIR/review.md`. Include in it:
 - **Origin** — where the work came from (ticket link, user conversation,
   incident, spec/RFC). This gives the reviewer the "why."
 - **What changed and why** — a brief summary of the goal.
@@ -64,16 +72,19 @@ Do not assume the models that are available. Always check with the CLI tool firs
 
 For example:
 
+Capture each model's output into `$REVIEW_DIR/` so results are preserved
+alongside the prompt that produced them:
+
 ```bash
 # Cursor Agent
-agent --model gpt-5.4-xhigh --print "$(cat /tmp/code-review.md)" 2>&1
-agent --model claude-4.6-opus-max-thinking --print "$(cat /tmp/code-review.md)" 2>&1
+agent --model gpt-5.4-xhigh --print "$(cat "$REVIEW_DIR/review.md")" 2>&1 | tee "$REVIEW_DIR/response-gpt.md"
+agent --model claude-4.6-opus-max-thinking --print "$(cat "$REVIEW_DIR/review.md")" 2>&1 | tee "$REVIEW_DIR/response-opus.md"
 
 # Claude Code
-claude --model claude-sonnet-4-20250514 -p "$(cat /tmp/code-review.md)" 2>&1
+claude --model claude-sonnet-4-20250514 -p "$(cat "$REVIEW_DIR/review.md")" 2>&1 | tee "$REVIEW_DIR/response-sonnet.md"
 
 # OpenAI Codex
-codex --model o3 -q "$(cat /tmp/code-review.md)" 2>&1
+codex --model o3 -q "$(cat "$REVIEW_DIR/review.md")" 2>&1 | tee "$REVIEW_DIR/response-o3.md"
 ```
 
 ### 3. Synthesize feedback
