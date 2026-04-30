@@ -11,6 +11,10 @@ These are non-negotiable personal conventions unless explicitly overridden by th
 
 **No model observers, ever** — Never use Laravel model observers or listen for Eloquent model events (`creating`, `saved`, etc.). Dispatch explicit domain events instead. This is non-negotiable. If they already exist for a given model, mention it to the user, but keep building.
 
+If you are adding **timestamps with millisecond precision**, make sure that you write a `$dateFormat` on the model or in the cast. Otherwise, the precision is silently discarded on DB writes.
+
+**Always set the `$table` value**. This avoids Laravel having to compute the table name every time it's needed.
+
 ## Logging
 
 Use `Context@scope()` liberally if important contextual data exists in a parent but not within the children, and the children are writing logs. This allows for maintaining contextual information inside of function calls without needing to pass that data to child functions.
@@ -29,6 +33,8 @@ Context::scope(function() use ($user) {
 Prefer `new Collection()` over `collect()`. This reduces an extra stack and indirection.
 
 Using `tap()` is rarely the right call for readability.
+
+Prefer `CarbonImmutable::now()` over `now()`.
 
 ## Dependency Injection
 

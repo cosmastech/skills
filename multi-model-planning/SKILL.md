@@ -84,7 +84,7 @@ produced it:
 
 ```bash
 # Cursor Agent
-agent --model gpt-5.4-xhigh --print "$(cat "$PLAN_DIR/plan-r${REVISION}-review.md")" 2>&1 | tee "$PLAN_DIR/plan-r${REVISION}-response-gpt.md"
+agent --model gpt-5.5-extra-high --print "$(cat "$PLAN_DIR/plan-r${REVISION}-review.md")" 2>&1 | tee "$PLAN_DIR/plan-r${REVISION}-response-gpt.md"
 agent --model claude-opus-4-7-thinking-xhigh --print "$(cat "$PLAN_DIR/plan-r${REVISION}-review.md")" 2>&1 | tee "$PLAN_DIR/plan-r${REVISION}-response-opus.md"
 
 # Claude Code
@@ -145,7 +145,7 @@ todo items as completed and begin the implementation todos.
 - **Always use thinking models.** Planning reviews require deep reasoning.
   Never use non-thinking models (e.g. `gpt-4o`, `claude-sonnet`) for plan
   review. Use models with extended thinking capabilities (e.g.
-  `gpt-5.3-codex-high`, `composer-2`, `claude-sonnet-4-thinking`,
+  `gpt-5.5-extra-high`, `composer-2`, `claude-sonnet-4-thinking`,
   `o3`). If unsure whether a model supports thinking, ask the user.
 - **Use different providers.** Ideally each reviewer model should be from a
   different provider (e.g. one OpenAI, one Anthropic, one Cursor) to avoid

@@ -77,7 +77,7 @@ alongside the prompt that produced them:
 
 ```bash
 # Cursor Agent
-agent --model gpt-5.4-xhigh --print "$(cat "$REVIEW_DIR/review.md")" 2>&1 | tee "$REVIEW_DIR/response-gpt.md"
+agent --model gpt-5.5-extra-high --print "$(cat "$REVIEW_DIR/review.md")" 2>&1 | tee "$REVIEW_DIR/response-gpt.md"
 agent --model claude-opus-4-7-thinking-xhigh --print "$(cat "$REVIEW_DIR/review.md")" 2>&1 | tee "$REVIEW_DIR/response-opus.md"
 
 # Claude Code

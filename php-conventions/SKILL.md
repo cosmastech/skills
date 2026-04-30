@@ -26,6 +26,8 @@ These are non-negotiable personal conventions unless explicitly overridden by th
 
 - **`final readonly` classes** — Prefer `final readonly` by default. Drop `readonly` only when mutability is genuinely needed (e.g., mutable DTOs, test cases). Drop `final` only when extension is a deliberate design choice. If either worsens developer experience, relax — but call it out.
 
+- **Prefer immutable datetime objects** - There is a horrendous class of bugs caused by datetime mutability. Prefer `\DateTimeImmutable` and `CarbonImmutable` whenever possible.
+
 - **PHPStan generics & iterables** — Document iterables and generic types explicitly. Never mark iterables as `array<array-key, mixed>` — take the time to define the actual shape. Use `@phpstan-type` annotations when the type will likely be imported by other files:
    ```php
    /**
