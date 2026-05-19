@@ -30,7 +30,7 @@ Context::scope(function() use ($user) {
 
 ## Helper Methods
 
-Prefer `new Collection()` over `collect()`. This reduces an extra stack and indirection.
+Prefer `new Collection()` over `collect()`. This reduces both a stack frame and indirection.
 
 Using `tap()` is rarely the right call for readability.
 
@@ -42,4 +42,4 @@ Prefer dependency injection to using facades. For large projects, test suite tim
 
 ## Testing
 
-Use `Model::factory()->make()` whenever possible. Database writes are often unnecessary inside of tests.
+Use `Model::factory()->make()` (or `new Model(['property_1' => 'some-value'])`) whenever possible. Database writes are often unnecessary inside of tests.
