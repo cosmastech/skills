@@ -112,8 +112,6 @@ These are non-negotiable personal conventions unless explicitly overridden by th
 
 - **Test method naming** - The method of a test name should be `{condition}_{theMethodBeingCalled}_{then}` and should use the `#[Test]` attribute rather than prefixing the method with `test_`. Be descriptive, but avoid making the test method name more than 60 characters.
 
-- **Reference assertion methods statically** - PHPUnit allows you to call either `$this->assertEquals()` or `self::assertEquals()`. Unless the rest of the test class is already using `$this->assert*`, prefer calling them statically.
-
 - **Mark tests as final** - This is the recommendation from PHPUnit's creator.
 
 - **Never test private/protected methods directly** — If you feel the need to test a private or protected method on code we own, that's a design smell. Extract the logic into a collaborator class with public methods and test that instead. The need to reach into private internals means the class is doing too much or the boundaries are wrong.
