@@ -9,7 +9,7 @@ These are non-negotiable personal conventions unless explicitly overridden by th
 
 ## Language & Syntax
 
-- **Strict types** — Every PHP file must declare `declare(strict_types=1);` at the top. If it is an existing file, you do not need to add it, but mention it to the user.
+- **Strict types** — Every PHP file must declare `declare(strict_types=1);` at the top. If it is an existing file or extracting legacy code (which may depend on type-juggling) into a new file, you do not need to add it, but mention it to the user.
 
 - **Prefer explicit falsy checks** — Use the narrowest comparison that matches the real condition, such as `=== null`, `=== ''`, or `=== 0`, instead of broad checks like `if (! $someValue)`. Negation is fine when the value is genuinely `bool` (for example, `if (! $isEnabled)`). This avoids surprising type coercion and makes intent clearer to humans and tools.
 
