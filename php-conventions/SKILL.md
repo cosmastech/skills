@@ -11,7 +11,14 @@ These are non-negotiable personal conventions unless explicitly overridden by th
 
 - **Strict types** — Every PHP file must declare `declare(strict_types=1);` at the top. If it is an existing file or extracting legacy code (which may depend on type-juggling) into a new file, you do not need to add it, but mention it to the user.
 
-- **Prefer explicit falsy checks** — Use the narrowest comparison that matches the real condition, such as `=== null`, `=== ''`, or `=== 0`, instead of broad checks like `if (! $someValue)`. Negation is fine when the value is genuinely `bool` (for example, `if (! $isEnabled)`). This avoids surprising type coercion and makes intent clearer to humans and tools.
+- **Prefer explicit falsy checks** — Use the narrowest comparison that matches the real condition, such as `=== null`, `=== ''`, or `=== 0`, instead of broad checks like `if (! $someValue)`. Negation is fine when the value is genuinely `bool` (for example, `if (! $isEnabled)`). This avoids surprising type coercion and makes intent clearer to humans and tools. Though using `empty()` is not preferred, it is better than writing methods like this:
+   ```php
+   // Unnecessary code, don't do this:
+   public function isNonEmptyEmail(?string $email): bool
+   {
+       return $email !== null && $email !== '';
+   }
+   ```
 
 - **Import function calls and constants** — Always use function and constant imports rather than calling global functions inline:
    ```php
