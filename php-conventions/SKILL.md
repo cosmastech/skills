@@ -43,6 +43,8 @@ These are non-negotiable personal conventions unless explicitly overridden by th
    ```
    Reference the phpstan-type (`phpstan-type-import` if defined in another class) instead of duplicating the array shape.
 
+While `list<T>` seems nice, if it requires writing `array_values()` before calling the function purely for static analysis, and the fact that the variable is a list has no consequence on the code, prefer `array<array-key, T>`.
+
 - **Avoid unnecessary nullability** — Do not accept `null` as a function/method argument or make a property nullable unless null carries distinct domain meaning (e.g., "not yet set," "intentionally cleared"). When a parameter is nullable only for convenience or because the caller *might* not have a value, push the null-check to the call site and keep the signature non-nullable. The same applies to return types: prefer throwing or returning a dedicated "empty" value type over returning `null` when the absence isn't semantically meaningful. Unnecessary nullability spreads defensive `=== null` checks throughout the codebase and weakens type safety.
 
 - **PHPStan discipline** — Do not add entries to PHPStan baseline files. Fix the errors properly. When a `@phpstan-ignore` is genuinely necessary, always include a parenthetical explanation of *why*:
