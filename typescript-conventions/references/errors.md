@@ -6,10 +6,7 @@ Every known failure mode appears in the return type as a custom tagged error, ev
 
 Known failures include domain, parsing, authorization, integration, I/O, persistence, configuration, and workflow failures.
 
-Use, in order:
-
-1. `better-result` when available.
-2. A small local tagged union:
+Use a small local tagged union:
 
 ```ts
 type Result<T, E extends Error> =
@@ -50,10 +47,7 @@ Use `casesHandled` for exhaustive union handling. Keep a defect helper local unt
 
 ## Custom errors
 
-Expected failures use custom tagged errors, generally extending:
-
-- `Error`;
-- `TaggedError` from `better-result`.
+Expected failures use custom tagged errors, generally extending `Error`.
 
 A custom error includes:
 
